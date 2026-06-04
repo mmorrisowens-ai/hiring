@@ -1023,6 +1023,19 @@ hr.divider { border: none; border-top: 1px solid var(--border); margin: 32px 0; 
   </div>
 
   <div class="pipeline-panel">
+    <div class="card-title">Load Existing Hire</div>
+    <p class="body">Choose a saved new hire to reopen their record, update dates/status, and regenerate their follow-up text.</p>
+    <div class="pipeline-actions" style="align-items:flex-end;flex-wrap:wrap">
+      <div class="form-group" style="min-width:260px;flex:1;margin-bottom:0">
+        <label>Saved New Hire</label>
+        <select id="nh-picker"><option value="">Loading saved hires...</option></select>
+      </div>
+      <button class="btn btn-primary" onclick="loadSelectedHire()">Load Selected</button>
+      <button class="btn btn-secondary" onclick="clearNewHireForm()">Start New Hire</button>
+    </div>
+  </div>
+
+  <div class="pipeline-panel">
     <div class="card-title">Add / Update New Hire</div>
     <p class="body">Enter the key dates. The dashboard will save the record to Supabase and generate the next follow-up text based on today's date.</p>
     <input type="hidden" id="nh-id">
@@ -1219,6 +1232,7 @@ function clearNewHireForm() {
     const el = document.getElementById(id); if (el) el.value = '';
   });
   const status = document.getElementById('nh-status'); if (status) status.value = 'enrolled';
+  const picker = document.getElementById('nh-picker'); if (picker) picker.value = '';
   setPipelineStatus('Form cleared.');
 }
 
@@ -1259,6 +1273,7 @@ async function loadNewHires() {
     setPipelineStatus('Loading...');
     const rows = await supabaseRequest(`${NEW_HIRES_TABLE}?select=*&order=created_at.desc`);
     window.__newHires = rows || [];
+    renderNewHirePicker(window.__newHires);
     renderNewHireList(window.__newHires);
     renderFollowups(window.__newHires);
     setPipelineStatus(`Loaded ${window.__newHires.length} new hire(s).`);
@@ -1268,6 +1283,37 @@ async function loadNewHires() {
     followups.innerHTML = '';
     setPipelineStatus('Load failed.');
   }
+}
+
+function renderNewHirePicker(rows) {
+  const picker = document.getElementById('nh-picker');
+  if (!picker) return;
+  if (!rows.length) {
+    picker.innerHTML = '<option value="">No saved new hires yet</option>';
+    return;
+  }
+  picker.innerHTML = '<option value="">Select a saved new hire...</option>' + rows.map((h, i) => {
+    const status = formatStatus(h.status);
+    const detail = h.class_day_1 ? ` · Class ${h.class_day_1}` : (h.exam_date ? ` · Exam ${h.exam_date}` : '');
+    return `<option value="${i}">${escapeHtml(h.agent_name)} — ${escapeHtml(status)}${escapeHtml(detail)}</option>`;
+  }).join('');
+}
+
+function loadSelectedHire() {
+  const picker = document.getElementById('nh-picker');
+  if (!picker || picker.value === '') {
+    alert('Choose a saved new hire first.');
+    return;
+  }
+  const hire = window.__newHires && window.__newHires[Number(picker.value)];
+  if (!hire) {
+    alert('Could not find that saved hire. Refresh the list and try again.');
+    return;
+  }
+  fillNewHireForm(hire);
+  setPipelineStatus(`Loaded ${hire.agent_name}. Make changes, then click Save New Hire.`);
+  const formTop = document.getElementById('nh-agent-name');
+  if (formTop) formTop.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
 function renderNewHireList(rows) {
