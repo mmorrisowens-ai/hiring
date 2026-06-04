@@ -306,6 +306,33 @@ ul.body-list li { color: var(--text-mid); font-size: 13.5px; margin-bottom: 5px;
 
 /* ── UTIL ── */
 hr.divider { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+/* ── PIPELINE DASHBOARD ── */
+.pipeline-panel { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 22px; margin-bottom: 18px; }
+.pipeline-form { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin: 16px 0; }
+.pipeline-form .form-group input, .pipeline-form .form-group select, .pipeline-form .form-group textarea {
+  width: 100%; border: 1.5px solid var(--border); border-radius: 7px; padding: 9px 12px; font-family: inherit; font-size: 13px; color: var(--text); background: white;
+}
+.pipeline-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top: 12px; align-items:center; }
+.pipeline-status { font-size: 12px; color: var(--text-light); margin-left: 4px; }
+.pipeline-list { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+.pipeline-card { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--gray); display: grid; grid-template-columns: 1.3fr .9fr 1fr auto; gap: 10px; align-items: center; }
+.pipeline-card strong { color: var(--navy); display:block; font-size: 14px; }
+.pipeline-card span { color: var(--text-mid); font-size: 12px; }
+.pipeline-badge { display:inline-block; border-radius: 999px; padding: 4px 10px; background: var(--blue-lt); color: var(--blue); font-size: 11px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; }
+.followup-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 14px; }
+.followup-card { border: 1px solid var(--border); border-left: 4px solid var(--blue); border-radius: 10px; background: white; padding: 16px; }
+.followup-top { display:flex; justify-content:space-between; gap:10px; align-items:flex-start; margin-bottom:8px; }
+.followup-title { font-weight:700; color:var(--navy); }
+.followup-meta { font-size:12px; color:var(--text-light); }
+.followup-text { background: var(--blue-lt); color:#1a3e6a; border-radius:8px; padding:12px 14px; font-size:13px; line-height:1.6; white-space:pre-wrap; margin: 10px 0; }
+.copy-btn { background: var(--green); color:white; border:none; border-radius:7px; padding:8px 12px; font-family:inherit; font-size:12px; font-weight:700; cursor:pointer; }
+.copy-btn:hover { opacity:.9; }
+@media (max-width: 760px) {
+  .pipeline-form { grid-template-columns: 1fr; }
+  .pipeline-card { grid-template-columns: 1fr; }
+}
+
 </style>
 </head>
 <body>
@@ -377,6 +404,9 @@ hr.divider { border: none; border-top: 1px solid var(--border); margin: 32px 0; 
   <a class="nav-item" onclick="nav('checkins')" href="#">
     <span class="nav-icon">💬</span> Check-In Messages
   </a>
+  <a class="nav-item" onclick="nav('pipeline')" href="#">
+    <span class="nav-icon">🧭</span> Pipeline Dashboard
+  </a>
 </nav>
 
 <!-- MAIN -->
@@ -429,6 +459,12 @@ hr.divider { border: none; border-top: 1px solid var(--border); margin: 32px 0; 
       <div class="hub-card-icon">💬</div>
       <div class="hub-card-title">Check-In Messages</div>
       <div class="hub-card-sub">14-day daily message sequence</div>
+      <div class="hub-card-arrow">→</div>
+    </div>
+    <div class="hub-card" onclick="nav('pipeline')">
+      <div class="hub-card-icon">🧭</div>
+      <div class="hub-card-title">Pipeline Dashboard</div>
+      <div class="hub-card-sub">Save new hires + generate follow-up texts</div>
       <div class="hub-card-arrow">→</div>
     </div>
     <div class="hub-card" onclick="nav('concierge')">
@@ -977,6 +1013,54 @@ hr.divider { border: none; border-top: 1px solid var(--border); margin: 32px 0; 
   <div class="page-footer">Globe Life Liberty National Division · Manager Reference · Confidential</div>
 </div>
 
+
+<!-- ══ PIPELINE DASHBOARD ═════════════════════════════════════ -->
+<div class="page" id="page-pipeline">
+  <div class="page-hero">
+    <div class="page-hero-eyebrow">Manager Tool</div>
+    <div class="page-hero-title">New Hire <span>Pipeline</span></div>
+    <div class="page-hero-sub">Track candidates from enrollment through class, exam, TNT, and orientation.</div>
+  </div>
+
+  <div class="pipeline-panel">
+    <div class="card-title">Add / Update New Hire</div>
+    <p class="body">Enter the key dates. The dashboard will save the record to Supabase and generate the next follow-up text based on today's date.</p>
+    <input type="hidden" id="nh-id">
+    <div class="pipeline-form">
+      <div class="form-group"><label>Agent Name *</label><input id="nh-agent-name" placeholder="e.g. Sarah Johnson"></div>
+      <div class="form-group"><label>Status</label><select id="nh-status"><option value="enrolled">Enrolled</option><option value="pre_class">Pre-Class Prep</option><option value="in_class">In Class</option><option value="studying">Studying</option><option value="testing">Testing</option><option value="passed">Passed Exam</option><option value="tnt">TNT</option><option value="orientation">Orientation</option><option value="active">Active Agent</option><option value="inactive">Inactive</option></select></div>
+      <div class="form-group"><label>Phone</label><input id="nh-phone" placeholder="Phone number"></div>
+      <div class="form-group"><label>Email</label><input id="nh-email" placeholder="Email address"></div>
+      <div class="form-group"><label>State</label><input id="nh-state" placeholder="MO, IL, etc."></div>
+      <div class="form-group"><label>Enrollment Date</label><input id="nh-enrollment-date" type="date"></div>
+      <div class="form-group"><label>Class Day 1</label><input id="nh-class-day-1" type="date"></div>
+      <div class="form-group"><label>Class Day 2</label><input id="nh-class-day-2" type="date"></div>
+      <div class="form-group"><label>Exam Date</label><input id="nh-exam-date" type="date"></div>
+      <div class="form-group"><label>TNT Start Date</label><input id="nh-tnt-start-date" type="date"></div>
+      <div class="form-group"><label>Orientation Date</label><input id="nh-orientation-date" type="date"></div>
+      <div class="form-group full"><label>Manager Notes</label><textarea id="nh-manager-notes" placeholder="Anything the manager needs to remember..."></textarea></div>
+    </div>
+    <div class="pipeline-actions">
+      <button class="btn btn-primary" onclick="saveNewHire()">Save New Hire</button>
+      <button class="btn btn-secondary" onclick="clearNewHireForm()">Clear Form</button>
+      <button class="btn btn-secondary" onclick="loadNewHires()">Refresh List</button>
+      <span class="pipeline-status" id="pipeline-status">Not connected yet.</span>
+    </div>
+  </div>
+
+  <div class="pipeline-panel">
+    <div class="card-title">Today's Follow-Ups</div>
+    <p class="body">These are generated from each new hire's real dates, not a fixed Day 1 / Day 2 sequence.</p>
+    <div id="followup-list" class="followup-grid"></div>
+  </div>
+
+  <div class="pipeline-panel">
+    <div class="card-title">Saved New Hires</div>
+    <div id="new-hire-list" class="pipeline-list"></div>
+  </div>
+  <div class="page-footer">Globe Life Liberty National Division · Manager Reference · Confidential</div>
+</div>
+
 </main>
 
 <!-- ══ ADD STATE MODAL ══════════════════════════════════════ -->
@@ -1058,6 +1142,212 @@ hr.divider { border: none; border-top: 1px solid var(--border); margin: 32px 0; 
 <script>
 // ── State data store ──────────────────────────────────────────────────────────
 const extraStates = {};
+
+// ── Supabase settings for New Hire Pipeline ──────────────────────────────────
+// Paste the SAME Supabase URL and anon key you use for your Agent Ops project.
+const SUPABASE_URL = "https://ghtwudtcgfywfgggyztc.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_SE1GhHygwcESdMkuF3BSug_K-RklCAQ";
+const NEW_HIRES_TABLE = "new_hires";
+
+function supabaseReady() {
+  return SUPABASE_URL && SUPABASE_ANON_KEY && !SUPABASE_URL.includes('PASTE_') && !SUPABASE_ANON_KEY.includes('PASTE_');
+}
+
+function setPipelineStatus(msg) {
+  const el = document.getElementById('pipeline-status');
+  if (el) el.textContent = msg;
+}
+
+async function supabaseRequest(path, options = {}) {
+  if (!supabaseReady()) throw new Error('Supabase URL/key still need to be added in the HTML file.');
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+    ...options,
+    headers: {
+      apikey: SUPABASE_ANON_KEY,
+      Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+      'Content-Type': 'application/json',
+      Prefer: 'return=representation',
+      ...(options.headers || {})
+    }
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(text || `Supabase request failed: ${res.status}`);
+  }
+  return res.status === 204 ? null : res.json();
+}
+
+function readNewHireForm() {
+  return {
+    id: document.getElementById('nh-id').value || null,
+    agent_name: document.getElementById('nh-agent-name').value.trim(),
+    phone: document.getElementById('nh-phone').value.trim() || null,
+    email: document.getElementById('nh-email').value.trim() || null,
+    state: document.getElementById('nh-state').value.trim() || null,
+    status: document.getElementById('nh-status').value || 'enrolled',
+    enrollment_date: document.getElementById('nh-enrollment-date').value || null,
+    class_day_1: document.getElementById('nh-class-day-1').value || null,
+    class_day_2: document.getElementById('nh-class-day-2').value || null,
+    exam_date: document.getElementById('nh-exam-date').value || null,
+    tnt_start_date: document.getElementById('nh-tnt-start-date').value || null,
+    orientation_date: document.getElementById('nh-orientation-date').value || null,
+    manager_notes: document.getElementById('nh-manager-notes').value.trim() || null,
+    last_generated_at: new Date().toISOString()
+  };
+}
+
+function fillNewHireForm(h) {
+  document.getElementById('nh-id').value = h.id || '';
+  document.getElementById('nh-agent-name').value = h.agent_name || '';
+  document.getElementById('nh-phone').value = h.phone || '';
+  document.getElementById('nh-email').value = h.email || '';
+  document.getElementById('nh-state').value = h.state || '';
+  document.getElementById('nh-status').value = h.status || 'enrolled';
+  document.getElementById('nh-enrollment-date').value = h.enrollment_date || '';
+  document.getElementById('nh-class-day-1').value = h.class_day_1 || '';
+  document.getElementById('nh-class-day-2').value = h.class_day_2 || '';
+  document.getElementById('nh-exam-date').value = h.exam_date || '';
+  document.getElementById('nh-tnt-start-date').value = h.tnt_start_date || '';
+  document.getElementById('nh-orientation-date').value = h.orientation_date || '';
+  document.getElementById('nh-manager-notes').value = h.manager_notes || '';
+  setPipelineStatus(`Loaded ${h.agent_name}.`);
+  nav('pipeline');
+}
+
+function clearNewHireForm() {
+  ['nh-id','nh-agent-name','nh-phone','nh-email','nh-state','nh-enrollment-date','nh-class-day-1','nh-class-day-2','nh-exam-date','nh-tnt-start-date','nh-orientation-date','nh-manager-notes'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value = '';
+  });
+  const status = document.getElementById('nh-status'); if (status) status.value = 'enrolled';
+  setPipelineStatus('Form cleared.');
+}
+
+async function saveNewHire() {
+  try {
+    const h = readNewHireForm();
+    if (!h.agent_name) { alert('Agent name is required.'); return; }
+    setPipelineStatus('Saving...');
+    const id = h.id;
+    delete h.id;
+    if (id) {
+      await supabaseRequest(`${NEW_HIRES_TABLE}?id=eq.${id}`, { method: 'PATCH', body: JSON.stringify(h) });
+      setPipelineStatus('Updated successfully.');
+    } else {
+      const saved = await supabaseRequest(NEW_HIRES_TABLE, { method: 'POST', body: JSON.stringify(h) });
+      if (saved && saved[0]) document.getElementById('nh-id').value = saved[0].id;
+      setPipelineStatus('Saved successfully.');
+    }
+    await loadNewHires();
+  } catch (err) {
+    console.error(err);
+    setPipelineStatus('Save failed. Check Supabase settings / policies.');
+    alert(err.message);
+  }
+}
+
+async function loadNewHires() {
+  const list = document.getElementById('new-hire-list');
+  const followups = document.getElementById('followup-list');
+  if (!list || !followups) return;
+  if (!supabaseReady()) {
+    list.innerHTML = '<div class="callout c-amber"><strong>SETUP NEEDED</strong>Paste your Supabase URL and anon key near the bottom of this HTML file.</div>';
+    followups.innerHTML = '<div class="callout c-amber"><strong>SETUP NEEDED</strong>Supabase is not connected yet.</div>';
+    setPipelineStatus('Add Supabase URL/key in the HTML file.');
+    return;
+  }
+  try {
+    setPipelineStatus('Loading...');
+    const rows = await supabaseRequest(`${NEW_HIRES_TABLE}?select=*&order=created_at.desc`);
+    window.__newHires = rows || [];
+    renderNewHireList(window.__newHires);
+    renderFollowups(window.__newHires);
+    setPipelineStatus(`Loaded ${window.__newHires.length} new hire(s).`);
+  } catch (err) {
+    console.error(err);
+    list.innerHTML = '<div class="callout c-amber"><strong>LOAD FAILED</strong>Check your Supabase URL, anon key, table name, and RLS policies.</div>';
+    followups.innerHTML = '';
+    setPipelineStatus('Load failed.');
+  }
+}
+
+function renderNewHireList(rows) {
+  const list = document.getElementById('new-hire-list');
+  if (!rows.length) { list.innerHTML = '<p class="body">No new hires saved yet.</p>'; return; }
+  list.innerHTML = rows.map((h, i) => `
+    <div class="pipeline-card">
+      <div><strong>${escapeHtml(h.agent_name)}</strong><span>${escapeHtml(h.email || '')} ${h.phone ? '· ' + escapeHtml(h.phone) : ''}</span></div>
+      <div><span class="pipeline-badge">${escapeHtml(formatStatus(h.status))}</span></div>
+      <div><span>${nextMilestoneLabel(h)}</span></div>
+      <button class="btn btn-secondary" onclick="fillNewHireForm(window.__newHires[${i}])">Edit</button>
+    </div>`).join('');
+}
+
+function renderFollowups(rows) {
+  const wrap = document.getElementById('followup-list');
+  const activeRows = rows.filter(h => !['active','inactive'].includes(h.status));
+  if (!activeRows.length) { wrap.innerHTML = '<p class="body">No active follow-ups right now.</p>'; return; }
+  wrap.innerHTML = activeRows.map((h, i) => {
+    const f = generateFollowup(h);
+    return `<div class="followup-card">
+      <div class="followup-top"><div><div class="followup-title">${escapeHtml(h.agent_name)}</div><div class="followup-meta">${escapeHtml(f.label)}</div></div><span class="pipeline-badge">${escapeHtml(formatStatus(h.status))}</span></div>
+      <div class="followup-text" id="followup-text-${i}">${escapeHtml(f.text)}</div>
+      <button class="copy-btn" onclick="copyFollowup('followup-text-${i}')">Copy Text</button>
+    </div>`;
+  }).join('');
+}
+
+function generateFollowup(h) {
+  const name = firstName(h.agent_name);
+  const today = startOfDay(new Date());
+  const class1 = parseDate(h.class_day_1);
+  const class2 = parseDate(h.class_day_2);
+  const exam = parseDate(h.exam_date);
+  const tnt = parseDate(h.tnt_start_date);
+  const orientation = parseDate(h.orientation_date);
+  if (class1) {
+    const d = diffDays(today, class1);
+    if (d > 7) return { label: `Class starts in ${d} days`, text: `Hey ${name}! Just checking in — your virtual licensing class is coming up on ${formatDate(class1)}. Between now and then, make sure you're enrolled, able to log in, and have that time fully blocked off. Let me know once you've verified your login info.` };
+    if (d === 7) return { label: 'Class starts in one week', text: `Hey ${name}! One week until licensing class. Have you received your login details and course materials yet? Today's goal is simple: make sure you can access everything before class week.` };
+    if (d <= 3 && d > 1) return { label: `Class starts in ${d} days`, text: `Hey ${name}! Your licensing class is coming up fast. Please verify your computer, webcam, internet, quiet workspace, and class login today so there are no surprises.` };
+    if (d === 1) return { label: 'Class starts tomorrow', text: `Hey ${name}! Tomorrow is Day 1 of licensing class. Be logged in early, have a notepad ready, and plan to be fully focused. Text me if you run into any issues.` };
+    if (d === 0) return { label: 'Class Day 1 today', text: `Today's the day, ${name}! Log in early, keep your camera on if required, take notes, and ask questions. Text me after class and let me know how it went.` };
+  }
+  if (class2 && diffDays(today, class2) === 0) return { label: 'Class Day 2 today', text: `Day 2, ${name}! You're almost through the live class portion. Pay close attention to health and state regulations. Text me once you're done so we can confirm your next study step.` };
+  if (exam) {
+    const e = diffDays(today, exam);
+    if (e > 1) return { label: `Exam in ${e} days`, text: `Hey ${name}! Your exam is scheduled for ${formatDate(exam)}. Stay locked into practice questions and weak areas. What was your latest practice score?` };
+    if (e === 1) return { label: 'Exam tomorrow', text: `Hey ${name}! Exam day is tomorrow. Light review only tonight, get good rest, and make sure your ID/testing details are ready. You’ve done the work — now trust it.` };
+    if (e === 0) return { label: 'Exam today', text: `${name} — today is the day! Arrive early with your valid government-issued photo ID. Breathe, trust what you studied, and text me as soon as you're done. Go get that license!` };
+    if (e === -1) return { label: 'Exam follow-up', text: `Hey ${name}! Checking in after your exam yesterday. Send me an update when you can so we can either celebrate and move to TNT or map out the retest plan together.` };
+  }
+  if (h.status === 'passed') return { label: 'Passed exam', text: `CONGRATULATIONS ${name}!!! You did it — you passed your licensing exam. Send your passing results to the Concierge Team right away for reimbursement, and let's confirm your TNT dates.` };
+  if (tnt) return { label: `TNT starts ${formatDate(tnt)}`, text: `Hey ${name}! TNT starts on ${formatDate(tnt)}. This is where you start turning the license into income. Make sure your calendar is blocked and you're ready to be fully present.` };
+  if (orientation) return { label: `Orientation ${formatDate(orientation)}`, text: `Hey ${name}! Reminder that orientation is scheduled for ${formatDate(orientation)}. Be ready to plug in, meet the team, and understand exactly what comes next.` };
+  return { label: 'General check-in', text: `Hey ${name}! Quick check-in — where are you at today with enrollment, class prep, or exam scheduling? Let me know what you need from me to keep moving.` };
+}
+
+function firstName(full) { return (full || 'there').trim().split(/\s+/)[0]; }
+function parseDate(v) { if (!v) return null; const [y,m,d] = v.split('-').map(Number); return new Date(y, m-1, d); }
+function startOfDay(d) { return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
+function diffDays(a,b) { return Math.round((startOfDay(b)-startOfDay(a))/(1000*60*60*24)); }
+function formatDate(d) { return d ? d.toLocaleDateString(undefined, { month:'short', day:'numeric', year:'numeric' }) : ''; }
+function formatStatus(s) { return (s || 'enrolled').replace(/_/g,' '); }
+function nextMilestoneLabel(h) {
+  if (h.class_day_1) return `Class Day 1: ${h.class_day_1}`;
+  if (h.exam_date) return `Exam: ${h.exam_date}`;
+  if (h.tnt_start_date) return `TNT: ${h.tnt_start_date}`;
+  if (h.orientation_date) return `Orientation: ${h.orientation_date}`;
+  return 'No dates entered yet';
+}
+function escapeHtml(str) { return String(str || '').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c])); }
+async function copyFollowup(id) {
+  const text = document.getElementById(id)?.innerText || '';
+  await navigator.clipboard.writeText(text);
+  setPipelineStatus('Copied follow-up text.');
+}
+
+document.addEventListener('DOMContentLoaded', () => { loadNewHires(); });
+
 
 function nav(id) {
   // hide all pages
