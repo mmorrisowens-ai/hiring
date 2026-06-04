@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agent Hiring & Onboarding Playbook</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0d2b4e;
+  --blue: #1a5fa0;
+  --blue-lt: #deeaf8;
+  --green: #1e6e3e;
+  --green-lt: #e4f5ec;
+  --amber: #92460a;
+  --amber-lt: #fef3e2;
+  --teal: #0a5c47;
+  --teal-lt: #e0f5ee;
+  --purple: #5b1a8a;
+  --purple-lt: #f3e8fd;
+  --gold: #c8961a;
+  --border: #dde2ea;
+  --text: #1a1f2e;
+  --text-mid: #4a5568;
+  --text-light: #8492a6;
+  --gray: #f7f8fa;
+  --gray2: #eef0f3;
+  --white: #ffffff;
+  --sidebar-w: 240px;
+  --header-h: 56px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'DM Sans', sans-serif; font-size: 14px; line-height: 1.7; color: var(--text); background: var(--gray); }
+
+/* ── HEADER ── */
+.header {
+  position: fixed; top: 0; left: 0; right: 0; height: var(--header-h);
+  background: var(--navy); z-index: 100;
+  display: flex; align-items: center; padding: 0 24px; gap: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+}
+.header-logo { font-family: 'DM Serif Display', serif; font-size: 18px; color: white; white-space: nowrap; }
+.header-logo span { color: var(--gold); font-style: italic; }
+.header-sub { font-size: 11px; color: rgba(255,255,255,0.45); letter-spacing: 0.08em; text-transform: uppercase; }
+.header-badge { margin-left: auto; font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.5); letter-spacing: 0.06em; text-transform: uppercase; }
+
+/* ── SIDEBAR ── */
+.sidebar {
+  position: fixed; top: var(--header-h); left: 0; bottom: 0;
+  width: var(--sidebar-w); background: var(--white);
+  border-right: 1px solid var(--border); overflow-y: auto;
+  z-index: 90; padding: 16px 0 40px;
+}
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+.nav-section { margin-bottom: 4px; }
+.nav-group-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--text-light);
+  padding: 12px 20px 4px;
+}
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 20px; cursor: pointer;
+  font-size: 13px; color: var(--text-mid);
+  border-left: 3px solid transparent;
+  transition: all 0.15s; text-decoration: none;
+}
+.nav-item:hover { background: var(--gray); color: var(--navy); }
+.nav-item.active { background: var(--blue-lt); color: var(--blue); border-left-color: var(--blue); font-weight: 500; }
+.nav-item .nav-icon { font-size: 14px; width: 18px; text-align: center; flex-shrink: 0; }
+.nav-divider { height: 1px; background: var(--border); margin: 8px 16px; }
+
+/* State nav items */
+.nav-state { padding-left: 32px; font-size: 12px; }
+.nav-state.active { background: var(--blue-lt); color: var(--blue); border-left-color: var(--blue); }
+.nav-add-state {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 20px 6px 32px; cursor: pointer;
+  font-size: 12px; color: var(--text-light);
+  border: none; background: none; width: 100%;
+  text-align: left; font-family: inherit;
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+.nav-add-state:hover { color: var(--blue); background: var(--blue-lt); }
+
+/* ── MAIN ── */
+.main {
+  margin-left: var(--sidebar-w);
+  margin-top: var(--header-h);
+  min-height: calc(100vh - var(--header-h));
+}
+
+/* ── PAGES ── */
+.page { display: none; padding: 40px 48px 80px; max-width: 860px; }
+.page.active { display: block; }
+
+/* ── PAGE HEADER ── */
+.page-hero {
+  background: var(--navy); border-radius: 14px;
+  padding: 36px 40px; margin-bottom: 36px;
+  position: relative; overflow: hidden;
+}
+.page-hero::before {
+  content: ''; position: absolute; top: -40px; right: -40px;
+  width: 200px; height: 200px; border-radius: 50%;
+  background: rgba(255,255,255,0.04);
+}
+.page-hero-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+.page-hero-title { font-family: 'DM Serif Display', serif; font-size: 36px; color: white; line-height: 1.1; margin-bottom: 10px; }
+.page-hero-title span { font-style: italic; color: var(--gold); }
+.page-hero-sub { font-size: 14px; color: rgba(255,255,255,0.6); }
+.page-hero-badge {
+  position: absolute; top: 28px; right: 32px;
+  background: rgba(255,255,255,0.1); border-radius: 20px;
+  padding: 6px 14px; font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.7);
+}
+
+/* ── COVER TILES ── */
+.cover-tiles { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin: 28px 0; }
+.cover-tile { border-radius: 10px; padding: 22px 20px; text-align: center; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; }
+.cover-tile:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
+.cover-tile .days { font-family: 'DM Serif Display', serif; font-size: 30px; margin-bottom: 4px; }
+.cover-tile .label { font-size: 12px; font-weight: 500; }
+.tile-blue { background: var(--blue-lt); color: var(--blue); }
+.tile-green { background: var(--green-lt); color: var(--green); }
+.tile-teal { background: var(--teal-lt); color: var(--teal); }
+
+/* ── TIMELINE ── */
+.timeline { margin: 28px 0; }
+.timeline-row {
+  display: flex; align-items: stretch; gap: 0; margin-bottom: 0;
+  border-bottom: 1px solid var(--border);
+}
+.timeline-row:first-child { border-top: 1px solid var(--border); }
+.timeline-days {
+  width: 90px; flex-shrink: 0; padding: 14px 16px;
+  font-weight: 600; font-size: 13px; border-right: 1px solid var(--border);
+  display: flex; align-items: center;
+}
+.timeline-phase { flex: 1; padding: 14px 16px; font-size: 13px; color: var(--text-mid); display: flex; align-items: center; border-right: 1px solid var(--border); }
+.timeline-goal { width: 200px; flex-shrink: 0; padding: 14px 16px; font-size: 12px; color: var(--text-light); display: flex; align-items: center; }
+.timeline-head { background: var(--navy); }
+.timeline-head .timeline-days, .timeline-head .timeline-phase, .timeline-head .timeline-goal { color: white; font-weight: 500; font-size: 12px; letter-spacing: 0.04em; }
+
+/* ── CARDS ── */
+.card { background: var(--white); border-radius: 10px; border: 1px solid var(--border); padding: 24px; margin-bottom: 16px; }
+.card-title { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--navy); margin-bottom: 10px; }
+
+/* ── STEP CARDS ── */
+.steps { display: flex; flex-direction: column; gap: 16px; margin: 20px 0; }
+.step { display: flex; gap: 16px; align-items: flex-start; }
+.step-num { width: 34px; height: 34px; border-radius: 50%; background: var(--navy); color: white; font-family: 'DM Serif Display', serif; font-size: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+.step-body h3 { font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 6px; }
+.step-body ul { margin-left: 18px; }
+.step-body li { font-size: 13px; color: var(--text-mid); margin-bottom: 4px; }
+
+/* ── CALLOUTS ── */
+.callout { border-radius: 8px; padding: 13px 16px; margin: 16px 0; font-size: 13px; line-height: 1.6; }
+.callout strong { display: block; margin-bottom: 2px; font-size: 12px; letter-spacing: 0.04em; }
+.c-amber { background: var(--amber-lt); border-left: 3px solid var(--amber); color: var(--amber); }
+.c-blue  { background: var(--blue-lt);  border-left: 3px solid var(--blue);  color: #1a3e6a; }
+.c-green { background: var(--green-lt); border-left: 3px solid var(--green); color: var(--green); }
+.c-teal  { background: var(--teal-lt);  border-left: 3px solid var(--teal);  color: var(--teal); }
+.c-navy  { background: var(--navy);     border-left: 3px solid var(--gold);  color: rgba(255,255,255,0.9); }
+
+/* ── TABLES ── */
+.tbl { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; border-radius: 8px; overflow: hidden; }
+.tbl thead tr { background: var(--navy); }
+.tbl thead th { padding: 10px 14px; text-align: left; color: white; font-weight: 500; font-size: 12px; letter-spacing: 0.03em; }
+.tbl tbody tr:nth-child(even) { background: var(--gray); }
+.tbl tbody tr:hover { background: var(--blue-lt); }
+.tbl td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--text-mid); vertical-align: top; }
+.tbl td:first-child { font-weight: 500; color: var(--text); }
+
+/* ── SCRIPT BUBBLES ── */
+.bubble { border-radius: 10px; padding: 14px 18px; margin: 8px 0; }
+.bubble-lbl { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 5px; }
+.bubble-txt { font-size: 13.5px; line-height: 1.65; }
+.b-manager { background: var(--blue-lt); }
+.b-manager .bubble-lbl { color: var(--blue); }
+.b-manager .bubble-txt { color: #1a3e6a; }
+.b-them { background: var(--gray2); }
+.b-them .bubble-lbl { color: var(--text-light); }
+.b-them .bubble-txt { color: var(--text-mid); font-style: italic; }
+.b-close { background: var(--green-lt); }
+.b-close .bubble-lbl { color: var(--green); }
+.b-close .bubble-txt { color: var(--green); font-weight: 500; }
+
+/* ── OBJECTIONS ── */
+.objection { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 14px; }
+.obj-q { background: var(--gray); padding: 10px 16px; font-size: 13px; font-style: italic; color: var(--text-mid); border-bottom: 1px solid var(--border); }
+.obj-a { padding: 10px 16px; font-size: 13px; color: #1a3e6a; background: var(--blue-lt); }
+
+/* ── SCHOLARSHIP ── */
+.schol-header { border-radius: 10px 10px 0 0; padding: 20px 24px; }
+.schol-header h2 { font-family: 'DM Serif Display', serif; font-size: 20px; color: white; margin-bottom: 4px; }
+.schol-header p { font-size: 13px; color: rgba(255,255,255,0.7); }
+.schol-body { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--border); border-top: none; border-radius: 0 0 10px 10px; overflow: hidden; margin-bottom: 24px; }
+.schol-col { padding: 20px 22px; }
+.schol-col:first-child { border-right: 1px solid var(--border); background: var(--gray); }
+.schol-col h3 { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-light); margin-bottom: 12px; }
+.reimb-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-radius: 6px; margin-bottom: 8px; }
+.reimb-100 { background: var(--green-lt); color: var(--green); }
+.reimb-50  { background: var(--gray2);    color: var(--text-mid); }
+.reimb-timeline { font-size: 15px; font-weight: 600; }
+.reimb-amount { font-size: 13px; font-weight: 500; }
+.fine { font-size: 11px; color: var(--text-light); margin-top: 12px; line-height: 1.5; }
+
+/* ── CONCIERGE CARD ── */
+.concierge-card { background: var(--navy); border-radius: 14px; padding: 32px; margin: 20px 0; text-align: center; }
+.concierge-card h2 { font-family: 'DM Serif Display', serif; font-size: 24px; color: white; margin-bottom: 6px; }
+.concierge-tagline { font-size: 11px; color: rgba(255,255,255,0.5); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 24px; }
+.concierge-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 24px; text-align: left; }
+.concierge-item { background: rgba(255,255,255,0.07); border-radius: 8px; padding: 12px 14px; font-size: 13px; color: rgba(255,255,255,0.8); }
+.concierge-item::before { content: "→ "; color: var(--gold); font-weight: 700; }
+.concierge-contact { display: inline-flex; gap: 32px; background: rgba(255,255,255,0.08); border-radius: 10px; padding: 16px 28px; }
+.contact-item { font-size: 14px; font-weight: 500; color: white; }
+.contact-item span { display: block; font-size: 10px; color: rgba(255,255,255,0.45); font-weight: 400; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 2px; }
+
+/* ── STATE PAGE ── */
+.state-hero { border-radius: 12px; padding: 28px 32px; margin-bottom: 28px; }
+.state-name-row { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+.state-name-row h1 { font-family: 'DM Serif Display', serif; font-size: 32px; color: white; }
+.state-provider-badge { background: rgba(255,255,255,0.15); border-radius: 20px; padding: 5px 14px; font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.9); }
+.state-hero p { color: rgba(255,255,255,0.65); font-size: 14px; }
+.state-schol-badge { display: inline-block; margin-top: 10px; background: rgba(255,255,255,0.1); border-radius: 6px; padding: 4px 12px; font-size: 12px; color: rgba(255,255,255,0.8); }
+
+/* ── HUB CARDS ── */
+.hub-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin: 20px 0; }
+.hub-card { background: white; border: 1px solid var(--border); border-radius: 10px; padding: 20px; cursor: pointer; transition: all 0.15s; display: flex; flex-direction: column; gap: 6px; }
+.hub-card:hover { border-color: var(--blue); box-shadow: 0 4px 16px rgba(26,95,160,0.12); transform: translateY(-1px); }
+.hub-card-icon { font-size: 22px; margin-bottom: 4px; }
+.hub-card-title { font-weight: 600; font-size: 14px; color: var(--navy); }
+.hub-card-sub { font-size: 12px; color: var(--text-light); }
+.hub-card-arrow { margin-top: auto; font-size: 18px; color: var(--blue); align-self: flex-end; }
+
+/* ── STATE SELECTOR ── */
+.state-selector { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 20px 0; }
+.state-btn {
+  background: white; border: 1.5px solid var(--border); border-radius: 10px;
+  padding: 18px 16px; cursor: pointer; text-align: left;
+  transition: all 0.15s; font-family: inherit;
+}
+.state-btn:hover { border-color: var(--blue); background: var(--blue-lt); }
+.state-btn .state-abbr { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--navy); display: block; }
+.state-btn .state-full { font-size: 12px; color: var(--text-light); }
+.state-btn .state-prov { font-size: 11px; font-weight: 600; color: var(--blue); margin-top: 4px; display: block; }
+.state-add-btn {
+  background: white; border: 2px dashed var(--border); border-radius: 10px;
+  padding: 18px 16px; cursor: pointer; text-align: center;
+  transition: all 0.15s; font-family: inherit; color: var(--text-light);
+}
+.state-add-btn:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-lt); }
+.state-add-btn .add-icon { font-size: 24px; display: block; margin-bottom: 4px; }
+.state-add-btn .add-lbl { font-size: 12px; font-weight: 600; }
+
+/* ── CHECK-IN MESSAGES ── */
+.phase-pill { display: inline-block; border-radius: 20px; padding: 4px 14px; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin: 20px 0 14px; }
+.day-msg { margin-bottom: 20px; }
+.day-lbl { font-size: 12px; font-weight: 600; color: var(--navy); margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+.day-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--navy); flex-shrink: 0; }
+
+/* ── TRUST GRID ── */
+.trust-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+.trust-card { background: white; border-radius: 8px; padding: 16px; border-top: 3px solid var(--blue); border: 1px solid var(--border); border-top: 3px solid var(--blue); }
+.trust-card h4 { font-size: 13px; font-weight: 600; color: var(--navy); margin-bottom: 5px; }
+.trust-card p { font-size: 12.5px; color: var(--text-mid); margin: 0; }
+
+/* ── SECTION TITLE ── */
+.section-title { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--navy); margin: 28px 0 10px; }
+.section-title:first-child { margin-top: 0; }
+.sub-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--blue); margin: 20px 0 8px; }
+p.body { color: var(--text-mid); font-size: 14px; margin-bottom: 12px; }
+ul.body-list { margin: 8px 0 14px 20px; }
+ul.body-list li { color: var(--text-mid); font-size: 13.5px; margin-bottom: 5px; }
+
+/* ── ADD STATE MODAL ── */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; }
+.modal-overlay.open { display: flex; }
+.modal { background: white; border-radius: 14px; padding: 32px; width: 560px; max-height: 85vh; overflow-y: auto; }
+.modal h2 { font-family: 'DM Serif Display', serif; font-size: 24px; color: var(--navy); margin-bottom: 6px; }
+.modal p { font-size: 13px; color: var(--text-mid); margin-bottom: 24px; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-group.full { grid-column: 1 / -1; }
+.form-group label { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-light); }
+.form-group input, .form-group select, .form-group textarea {
+  border: 1.5px solid var(--border); border-radius: 7px; padding: 9px 12px;
+  font-family: inherit; font-size: 13px; color: var(--text);
+  transition: border-color 0.15s; background: white;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--blue); }
+.form-group textarea { resize: vertical; min-height: 70px; }
+.modal-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px; }
+.btn { border: none; border-radius: 8px; padding: 10px 22px; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+.btn-primary { background: var(--navy); color: white; }
+.btn-primary:hover { background: var(--blue); }
+.btn-secondary { background: var(--gray2); color: var(--text-mid); }
+.btn-secondary:hover { background: var(--border); }
+
+/* ── FOOTER ── */
+.page-footer { margin-top: 60px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 11px; color: var(--text-light); text-align: center; letter-spacing: 0.06em; text-transform: uppercase; }
+
+/* ── UTIL ── */
+hr.divider { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div>
+    <div class="header-logo">Agent <span>Onboarding</span> Playbook</div>
+    <div class="header-sub">Globe Life · Liberty National Division</div>
+  </div>
+  <div class="header-badge">Manager Reference · Confidential</div>
+</div>
+
+<!-- SIDEBAR -->
+<nav class="sidebar" id="sidebar">
+  <div class="nav-group-label">Overview</div>
+  <a class="nav-item active" onclick="nav('home')" href="#">
+    <span class="nav-icon">🏠</span> Home
+  </a>
+  <a class="nav-item" onclick="nav('timeline')" href="#">
+    <span class="nav-icon">📅</span> Timeline
+  </a>
+  <a class="nav-item" onclick="nav('hiring')" href="#">
+    <span class="nav-icon">🤝</span> Hiring Process
+  </a>
+
+  <div class="nav-divider"></div>
+  <div class="nav-group-label">Schooling</div>
+  <a class="nav-item" onclick="nav('schooling')" href="#">
+    <span class="nav-icon">📚</span> Pre-Licensing
+  </a>
+  <a class="nav-item" onclick="nav('tnt')" href="#">
+    <span class="nav-icon">🎓</span> TNT Training
+  </a>
+
+  <div class="nav-divider"></div>
+  <div class="nav-group-label">Programs</div>
+  <a class="nav-item" onclick="nav('scholarship')" href="#">
+    <span class="nav-icon">💰</span> Scholarships
+  </a>
+  <a class="nav-item" onclick="nav('concierge')" href="#">
+    <span class="nav-icon">📞</span> Agent Concierge
+  </a>
+
+  <div class="nav-divider"></div>
+  <div class="nav-group-label">State Requirements</div>
+  <a class="nav-item" onclick="nav('states')" href="#">
+    <span class="nav-icon">🗺️</span> All States
+  </a>
+  <a class="nav-item nav-state" onclick="nav('state-MO')" href="#" id="nav-state-MO">
+    <span class="nav-icon">🏛️</span> Missouri (MO)
+  </a>
+  <a class="nav-item nav-state" onclick="nav('state-IL')" href="#" id="nav-state-IL">
+    <span class="nav-icon">🏙️</span> Illinois (IL)
+  </a>
+  <div id="extra-state-nav"></div>
+  <button class="nav-add-state" onclick="openAddState()">
+    <span style="font-size:14px">＋</span> Add New State
+  </button>
+
+  <div class="nav-divider"></div>
+  <div class="nav-group-label">Manager Tools</div>
+  <a class="nav-item" onclick="nav('trust')" href="#">
+    <span class="nav-icon">🔑</span> Trust Building
+  </a>
+  <a class="nav-item" onclick="nav('script')" href="#">
+    <span class="nav-icon">🎙️</span> Interview Script
+  </a>
+  <a class="nav-item" onclick="nav('checkins')" href="#">
+    <span class="nav-icon">💬</span> Check-In Messages
+  </a>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+<!-- ══ HOME ══════════════════════════════════════════════ -->
+<div class="page active" id="page-home">
+  <div class="page-hero">
+    <div class="page-hero-eyebrow">Globe Life · Liberty National Division</div>
+    <div class="page-hero-title">Agent Hiring &<br><span>Onboarding</span> Playbook</div>
+    <div class="page-hero-sub">Manager Reference Guide — Everything you need to hire, license, and launch virtual agents.</div>
+    <div class="page-hero-badge">Confidential</div>
+  </div>
+
+  <div class="cover-tiles">
+    <div class="cover-tile tile-blue" onclick="nav('hiring')">
+      <div class="days">Days 1–2</div>
+      <div class="label">Hiring Process →</div>
+    </div>
+    <div class="cover-tile tile-green" onclick="nav('schooling')">
+      <div class="days">Days 3–16</div>
+      <div class="label">Pre-Licensing →</div>
+    </div>
+    <div class="cover-tile tile-teal" onclick="nav('tnt')">
+      <div class="days">Days 17–21</div>
+      <div class="label">TNT Training →</div>
+    </div>
+  </div>
+
+  <div class="hub-grid">
+    <div class="hub-card" onclick="nav('states')">
+      <div class="hub-card-icon">🗺️</div>
+      <div class="hub-card-title">State Requirements</div>
+      <div class="hub-card-sub">MO · IL · Add new states</div>
+      <div class="hub-card-arrow">→</div>
+    </div>
+    <div class="hub-card" onclick="nav('scholarship')">
+      <div class="hub-card-icon">💰</div>
+      <div class="hub-card-title">Scholarship Programs</div>
+      <div class="hub-card-sub">100% reimbursement in 15 days</div>
+      <div class="hub-card-arrow">→</div>
+    </div>
+    <div class="hub-card" onclick="nav('script')">
+      <div class="hub-card-icon">🎙️</div>
+      <div class="hub-card-title">Final Interview Script</div>
+      <div class="hub-card-sub">Full script + objection handling</div>
+      <div class="hub-card-arrow">→</div>
+    </div>
+    <div class="hub-card" onclick="nav('checkins')">
+      <div class="hub-card-icon">💬</div>
+      <div class="hub-card-title">Check-In Messages</div>
+      <div class="hub-card-sub">14-day daily message sequence</div>
+      <div class="hub-card-arrow">→</div>
+    </div>
+    <div class="hub-card" onclick="nav('concierge')">
+      <div class="hub-card-icon">📞</div>
+      <div class="hub-card-title">Agent Concierge Team</div>
+      <div class="hub-card-sub">LNAgentConcierge@Globe.Life · 469-317-0281</div>
+      <div class="hub-card-arrow">→</div>
+    </div>
+    <div class="hub-card" onclick="nav('trust')">
+      <div class="hub-card-icon">🔑</div>
+      <div class="hub-card-title">Trust-Building Strategies</div>
+      <div class="hub-card-sub">Six practices for virtual agents</div>
+      <div class="hub-card-arrow">→</div>
+    </div>
+  </div>
+  <div class="page-footer">Globe Life Liberty National Division · Manager Reference · Confidential</div>
+</div>
+
+<!-- ══ TIMELINE ═══════════════════════════════════════════ -->
+<div class="page" id="page-timeline">
+  <div class="page-hero">
+    <div class="page-hero-eyebrow">Section 1</div>
+    <div class="page-hero-title">Process <span>Timeline</span></div>
+    <div class="page-hero-sub">From first contact to first day of TNT — 17 to 21 days total.</div>
+  </div>
+
+  <div class="timeline">
+    <div class="timeline-row timeline-head">
+      <div class="timeline-days">Days</div>
+      <div class="timeline-phase">Phase</div>
+      <div class="timeline-goal">Goal</div>
+    </div>
+    <div class="timeline-row">
+      <div class="timeline-days" style="color:var(--blue);font-weight:700">1–2</div>
+      <div class="timeline-phase">Phase 1: Hiring Process — Initial Interview → CLB → Final Interview</div>
+      <div class="timeline-goal">Offer accepted + class date locked</div>
+    </div>
+    <div class="timeline-row">
+      <div class="timeline-days" style="color:var(--green);font-weight:700">3–4</div>
+      <div class="timeline-phase">Phase 2: Live virtual pre-licensing class (TSI National or Xcel)</div>
+      <div class="timeline-goal">Complete 2-day webinar</div>
+    </div>
+    <div class="timeline-row">
+      <div class="timeline-days" style="color:var(--green);font-weight:700">5–12</div>
+      <div class="timeline-phase">Phase 2 (cont.): Self-study & daily chapter review</div>
+      <div class="timeline-goal">1–2 chapters per day</div>
+    </div>
+    <div class="timeline-row">
+      <div class="timeline-days" style="color:var(--amber);font-weight:700">13–14</div>
+      <div class="timeline-phase">Phase 2 (cont.): Exam week</div>
+      <div class="timeline-goal">Schedule & pass state exam</div>
+    </div>
+    <div class="timeline-row">
+      <div class="timeline-days" style="color:var(--teal);font-weight:700">17–21</div>
+      <div class="timeline-phase">Phase 3: TNT classroom training</div>
+      <div class="timeline-goal">Licensed agent in training</div>
+    </div>
+  </div>
+
+  <div class="callout c-amber">
+    <strong>⚠ KEY RULE</strong>
+    Do not end the final interview without a class date on the calendar. A date is a commitment — no date means it probably won't happen.
+  </div>
+  <div class="callout c-green">
+    <strong>💰 SCHOLARSHIP GOAL</strong>
+    Every agent — whether in a permanent or temp-to-perm state — should complete their coursework within 15 days of enrollment to qualify for 100% reimbursement. Build the timeline around this goal.
+  </div>
+  <div class="page-footer">Globe Life Liberty National Division · Manager Reference · Confidential</div>
+</div>
+
+<!-- ══ HIRING ══════════════════════════════════════════════ -->
+<div class="page" id="page-hiring">
+  <div class="page-hero">
+    <div class="page-hero-eyebrow">Section 2</div>
+    <div class="page-hero-title">Hiring <span>Process</span></div>
+    <div class="page-hero-sub">Days 1–2 · Three steps from first contact to offer accepted.</div>
+    <div class="page-hero-badge">Days 1–2</div>
+  </div>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <h3>Initial Interview</h3>
+        <ul>
+          <li>Duration: 30–45 minutes, virtual</li>
+          <li>Set expectations about the fully virtual work model early</li>
+          <li>Evaluate communication, coachability, and follow-through signals</li>
+          <li>If strong fit: invite to CLB same day or next morning</li>
+        </ul>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <h3>Career Leadership Briefing (CLB)</h3>
+        <ul>
+          <li>Group or virtual setting — runs independently of individual hiring</li>
+          <li>Build excitement and urgency around getting licensed</li>
+          <li>Connect candidates to existing agents so they see real proof</li>
+          <li>End by telling them the final interview is next</li>
+        </ul>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <h3>Final Interview & Commitment</h3>
+        <ul>
+          <li>Confirm the offer and role expectations</li>
+          <li>Introduce the schooling plan and daily chapter schedule</li>
+          <li>Identify which scholarship program applies (see <a href="#" onclick="nav('scholarship')">Scholarships</a>)</li>
+          <li>Cover the cost of pre-licensing — frame it as an investment, not a gift</li>
+          <li><strong>Lock in the class date together on the call</strong></li>
+          <li>Send enrollment link within 1 hour of hanging up</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="callout c-amber">
+    <strong>⚠ FRAMING THAT WORKS</strong>
+    "We're investing in you before you've proven yourself — because that's how you build a real team. In return, I need your commitment to finish within 14 days."
+  </div>
+  <div class="callout c-green">
+    <strong>💰 SCHOLARSHIP REMINDER</strong>
+    Remind them: finish within 15 days of enrollment = 100% reimbursement on the next paycheck. Use this as a closing motivator.
+  </div>
+  <div style="margin-top:24px">
+    <button class="btn btn-primary" onclick="nav('script')">→ View Full Interview Script</button>
+  </div>
+  <div class="page-footer">Globe Life Liberty National Division · Manager Reference · Confidential</div>
+</div>
+
+<!-- ══ SCHOOLING ══════════════════════════════════════════ -->
+<div class="page" id="page-schooling">
+  <div class="page-hero">
+    <div class="page-hero-eyebrow">Section 3</div>
+    <div class="page-hero-title">Pre-Licensing <span>Schooling</span></div>
+    <div class="page-hero-sub">Days 3–16 · Target: licensed within 15 days of enrollment for 100% scholarship.</div>
+    <div class="page-hero-badge">Days 3–16</div>
+  </div>
+
+  <p class="body">Course provider varies by state. <strong>Missouri:</strong> TSI National (2-day live webinar + 70 days online). <strong>Illinois:</strong> Xcel Solutions (mandatory 7.5-hour live webinar per line). See <a href="#" onclick="nav('states')">State Requirements</a> for details.</p>
+
+  <div class="section-title">Daily Chapter Schedule — Life, Accident & Health</div>
+  <table class="tbl">
+    <thead><tr><th>Day</th><th>Study Topics</th><th>Category</th></tr></thead>
+    <tbody>
+      <tr><td>Day 1</td><td>Insurance basics: risks, perils & risk-sharing; Life insurance fundamentals</td><td>Foundation</td></tr>
+      <tr><td>Day 2</td><td>Types of life insurance policies; Term vs. permanent coverage</td><td>Life core</td></tr>
+      <tr><td>Day 3</td><td>Policy provisions, riders & options; Beneficiary rules</td><td>Life core</td></tr>
+      <tr><td>Day 4</td><td>Annuities & their benefits; Understanding annuity payments</td><td>Annuities</td></tr>
+      <tr><td>Day 5</td><td>Group life insurance; Other forms of group coverage</td><td>Group</td></tr>
+      <tr><td>Day 6</td><td>Health insurance fundamentals; Key concepts & systems</td><td>Health</td></tr>
+      <tr><td>Day 7</td><td>Disability income & AD&D insurance; Accident coverage</td><td>Health</td></tr>
+      <tr><td>Day 8</td><td>Managed care: HMOs, PPOs, EPOs; Provider types & reimbursement</td><td>Health</td></tr>
+      <tr><td>Day 9</td><td>Medicare, Medicaid & Social Security; Government programs</td><td>Health</td></tr>
+      <tr><td>Day 10</td><td>State regulations & ethics; State-specific insurance law</td><td>Regulation</td></tr>
+      <tr><td>Days 11–12</td><td>Full review: flash cards, practice tests, weak-area reinforcement</td><td>Review</td></tr>
+      <tr><td>Days 13–14</td><td>Schedule state exam; Final practice test; Exam day</td><td>Exam</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout c-amber"><strong>⚠ MANAGER TIP</strong>Send a check-in message each morning with that day's goal. See <a href="#" onclick="nav('checkins')">Check-In Messages</a> for the full sequence.</div>
+  <div class="callout c-blue"><strong>⚠ ILLINOIS NOTE</strong>Xcel Solutions requires 100% attendance. Webcam on the entire time. Agents logged off for more than 10 cumulative minutes must reschedule. Alert IL hires before class day.</div>
+  <div class="page-footer">Globe Life Liberty National Division · Manager Reference · Confidential</div>
+</div>
+
+<!-- ══ TNT ══════════════════════════════════════════════ -->
+<div class="page" id="page-tnt">
+  <div class="page-hero">
+    <div class="page-hero-eyebrow">Section 4</div>
+    <div class="page-hero-title">TNT Classroom <span>Training</span></div>
+    <div class="page-hero-sub">Days 17–21 · Licensed and ready to build.</div>
+    <div class="page-hero-badge">Days 17–21</div>
+  </div>
+  <p class="body">Once the agent passes their state exam, they move immediately into TNT training. No waiting — the goal is to get them from licensed to earning as fast as possible.</p>
+  <ul class="body-list">
+    <li>5 days of classroom-style virtual training</li>
+    <li>Agent arrives with license in hand — no delays, no exceptions</li>
+    <li>Reinforce daily check-ins throughout TNT to maintain momentum</li>
+    <li>Celebrate the licensing milestone publicly within the team</li>
+  </ul>
+  <div class="callout c-teal"><strong>⚠ FRAMING TIP</strong>"Get licensed, and you're in training the following week. Training is where you start building your income."</div>
+  <div class="page-footer">Globe Life Liberty National Division · Manager Reference · Confidential</div>
+</div>
+
+<!-- ══ SCHOLARSHIP ══════════════════════════════════════ -->
+<div class="page" id="page-scholarship">
+  <div class="page-hero">
+    <div class="page-hero-eyebrow">Section 5</div>
+    <div class="page-hero-title">Scholarship <span>Programs</span></div>
+    <div class="page-hero-sub">Every agent qualifies. Finish in 15 days = 100% reimbursement on the next paycheck.</div>
+  </div>
+
+  <p class="body"><strong>Agent Concierge Contact:</strong> 📧 LNAgentConcierge@Globe.Life &nbsp;·&nbsp; 📱 469-317-0281</p>
+
+  <div class="schol-header" style="background:var(--navy);margin-top:24px">
+    <h2>Program A — Permanent License States</h2>
+    <p>For agents in states that require a permanent license from the start (e.g. Missouri, Illinois)</p>
+  </div>
+  <div class="schol-body">
+    <div class="schol-col">
+      <h3>Steps</h3>
+      <ol style="margin-left:16px;color:var(--text-mid);font-size:13px;line-height:1.8">
+        <li>Enroll in coursework</li>
+        <li>Pass the exam</li>
+      </ol>
+      <p style="font-size:12px;color:var(--text-light);margin-top:14px">The Concierge Department will begin reaching out after enrollment.</p>
+    </div>
+    <div class="schol-col">
+      <h3>Reimbursement</h3>
+      <div class="reimb-row reimb-100"><span class="reimb-timeline">0–15 Days</span><span class="reimb-amount">→ 100% Back</span></div>
+      <div class="reimb-row reimb-50"><span class="reimb-timeline">16–30 Days</span><span class="reimb-amount">→ 50% Back</span></div>
+      <p class="fine">Paid on next available paycheck after submission of passing results. Reimbursement = cost of obtaining the permanent license. Test fee reimbursed for the attempt passed. Form: 39950A / LND1399501A 0326</p>
+    </div>
+  </div>
+
+  <div class="schol-header" style="background:var(--purple);margin-top:24px">
+    <h2>Program B — Temp-to-Permanent States</h2>
+    <p>For agents hired on a temporary license who are transitioning to permanent status</p>
+  </div>
+  <div class="schol-body">
+    <div class="schol-col">
+      <h3>Steps</h3>
+      <ol style="margin-left:16px;color:var(--text-mid);font-size:13px;line-height:1.8">
+        <li>Get your Temporary License</li>
+        <li>Enroll in coursework within 30 days of first submit</li>
+        <li>Pass your licensing exam</li>
+      </ol>
+      <p style="font-size:12px;color:var(--text-light);margin-top:14px">The Concierge Team will reach out within a week of first submit.</p>
+    </div>
+    <div class="schol-col">
+      <h3>Reimbursement</h3>
+      <div class="reimb-row reimb-100"><span class="reimb-timeline">0–15 Days</span><span class="reimb-amount">→ 100% Back</span></div>
+      <div class="reimb-row reimb-50"><span class="reimb-timeline">16–30 Days</span><span class="reimb-amount">→ 50% Back</span></div>
+      <p class="fine">Must enroll within 30 days of first submit to qualify. Paid on next available paycheck. Scholarship = cost of obtaining permanent license. Test fee reimbursed for attempt passed. Form: 06741A / LND674104A 0326</p>
+    </div>
+  </div>
+
+  <div class="callout c-amber" style="margin-top:20px">
+    <strong>⚠ CLOSING TOOL</strong>
+    "Finish in 15 days or less and you get 100% back on your next paycheck. 16–30 days is 50% back. The faster you finish, the more you get back." — Use this in the final interview every time.
+  </div>
+  <div class="page-footer">Globe Life Liberty National Division · Manager Reference · Confidential</div>
+</div>
+
+<!-- ══ CONCIERGE ══════════════════════════════════════════ -->
+<div class="page" id="page-concierge">
+  <div class="page-hero">
+    <div class="page-hero-eyebrow">Section 6</div>
+    <div class="page-hero-title">Agent <span>Concierge</span> Team</div>
+    <div class="page-hero-sub">A dedicated support resource for every new hire through exam prep.</div>
+  </div>
+  <div class="concierge-card">
+    <h2>The Agent Concierge Team Welcomes You</h2>
+    <div class="concierge-tagline">Launch Your Career With Confidence</div>
+    <div class="concierge-grid">
+      <div class="concierge-item">Answer questions about coursework and exam prep</div>
+      <div class="concierge-item">Connect agents with the right resource or contact</div>
+      <div class="concierge-item">Provide exam scheduling requirements by state</div>
+      <div class="concierge-item">Stay in touch with updates and encouragement throughout prep</div>
+    </div>
+    <div class="concierge-contact">
+      <div class="contact-item"><span>Email</span>LNAgentConcierge@Globe.Life</div>
+      <div class="contact-item"><span>Call / Text</span>469-317-0281</div>
+    </div>
+  </div>
+  <div class="callout c-amber">
+    <strong>⚠ MANAGER TIP</strong>
+    Mention the Concierge Team by name during the final interview AND in your Day 1 evening message. Many agents don't reach out when stuck — pre-normalizing it removes that hesitation.
+  </div>
+  <div class="page-footer">Globe Life Liberty National Division · Manager Reference · Confidential</div>
+</div>
+
+<!-- ══ ALL STATES ═══════════════════════════════════════ -->
+<div class="page" id="page-states">
+  <div class="page-hero">
+    <div class="page-hero-eyebrow">Section 7</div>
+    <div class="page-hero-title">State Licensing <span>Requirements</span></div>
+    <div class="page-hero-sub">Select a state to see full requirements, course provider, exam details, and scholarship type.</div>
+  </div>
+  <p class="body">Always verify fees and requirements with the state DOI or course provider before quoting to agents — they are subject to change.</p>
+  <div class="state-selector" id="state-selector">
+    <button class="state-btn" onclick="nav('state-MO')">
+      <span class="state-abbr">MO</span>
+      <span class="state-full">Missouri</span>
+      <span class="state-prov">TSI National</span>
+    </button>
+    <button class="state-btn" onclick="nav('state-IL')">
+      <span class="state-abbr">IL</span>
+      <span class="state-full">Illinois</span>
+      <span class="state-prov">Xcel Solutions</span>
+    </button>
+    <button class="state-add-btn" onclick="openAddState()">
+      <span class="add-icon">＋</span>
+      <span class="add-lbl">Add New State</span>
+    </button>
+  </div>
+  <div class="page-footer">Globe Life Liberty National Division · Manager Reference · Confidential</div>
+</div>
+
+<!-- ══ STATE: MO ═════════════════════════════════════════ -->
+<div class="page" id="page-state-MO">
+  <div class="state-hero" style="background:var(--navy)">
+    <div class="state-name-row">
+      <h1>Missouri</h1>
+      <span class="state-provider-badge">TSI National</span>
+    </div>
+    <p>Life, Accident & Health · Permanent license required from the start · No temporary license available</p>
+    <span class="state-schol-badge">💰 Scholarship Program A — Permanent License</span>
+  </div>
+
+  <table class="tbl">
+    <thead><tr><th>Requirement</th><th>Details</th></tr></thead>
+    <tbody>
+      <tr><td>License Type</td><td>Life, Accident & Health — Permanent license required from the start</td></tr>
+      <tr><td>Course Provider</td><td>TSI National — 2-day live webinar + 70 days online access · tsinational.com</td></tr>
+      <tr><td>Required Hours</td><td>No state-mandated pre-licensing hours (course strongly recommended)</td></tr>
+      <tr><td>Exam Provider</td><td>Pearson VUE — <strong>IN-PERSON ONLY</strong> · No remote option</td></tr>
+      <tr><td>Exam Fee</td><td>$29 per line / $49 for combined Life, Accident & Health</td></tr>
+      <tr><td>Exam Questions</td><td>Combo: 170 questions (100 national + 45 MO state scoreable + pretest) · Life only: 110 · A&H only: 110</td></tr>
+      <tr><td>Passing Score</td><td>70% on EACH section — national and state scored separately, NOT averaged</td></tr>
+      <tr><td>Application Fee</td><td>$100 + $5.60 NIPR transaction fee — apply at nipr.com</td></tr>
+      <tr><td>Fingerprints</td><td>Not required for Life/Health license</td></tr>
+      <tr><td>Wait After Exam</td><td>24–48 hours, then apply via NIPR</td></tr>
+      <tr><td>Temp License</td><td>Missouri no longer issues temporary insurance licenses</td></tr>
+      <tr><td>Scholarship</td><td>Program A — Permanent License Scholarship · 0–15 days = 100% · 16–30 days = 50%</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout c-blue">
+    <strong>📌 MO EXAM NOTE</strong>
+    In-person only at Pearson VUE. Schedule at pearsonvue.com or call 866-274-4740. Arrive 30 minutes early with valid government-issued photo ID. No personal items in the testing room.
+  </div>
+  <div class="callout c-green">
+    <strong>💰 SCHOLARSHIP GOAL</strong>
+    MO agents are in a permanent license state. Encourage them to complete coursework and pass within 15 days of enrollment for 100% reimbursement.
+  </div>
+
+  <div style="margin-top:24px;display:flex;gap:12px">
+    <button class="btn btn-primary" onclick="nav('scholarship')">View Scholarship Details</button>
+    <button class="btn btn-secondary" onclick="nav('states')">← All States</button>
+  </div>
+  <div class="page-footer">Globe Life Liberty National Division · Manager Reference · Confidential</div>
+</div>
+
+<!-- ══ STATE: IL ═════════════════════════════════════════ -->
+<div class="page" id="page-state-IL">
+  <div class="state-hero" style="background:var(--blue)">
+    <div class="state-name-row">
+      <h1>Illinois</h1>
+      <span class="state-provider-badge">Xcel Solutions</span>
+    </div>
+    <p>Life, Accident & Health · Permanent license required · Mandatory live webinar · Fingerprints required</p>
+    <span class="state-schol-badge">💰 Scholarship Program A — Permanent License</span>
+  </div>
+
+  <div class="callout c-blue" style="margin-bottom:20px">
+    <strong>⚠ ILLINOIS WEBINAR RULES — Share with agents before class</strong>
+    Log in 5 minutes early — latecomers turned away. Webcam on 100% of the time. Must answer all polling questions. Logged off for more than 10 cumulative minutes = must reschedule.
+  </div>
+
+  <table class="tbl">
+    <thead><tr><th>Requirement</th><th>Details</th></tr></thead>
+    <tbody>
+      <tr><td>License Type</td><td>Life, Accident & Health — Permanent license required from the start</td></tr>
+      <tr><td>Course Provider</td><td>Xcel Solutions — xcelsolutions.com · REQUIRED: 7.5-hour live webinar per line · 100% attendance · Webcam on entire time</td></tr>
+      <tr><td>Required Hours</td><td>20 hours per line of authority (40 hours total for combined Life & Health) · Includes mandatory 7.5-hour live webinar per line</td></tr>
+      <tr><td>Exam Provider</td><td>Pearson VUE — <strong>IN-PERSON ONLY</strong> · No remote option</td></tr>
+      <tr><td>Exam Fee</td><td>$92 per exam · Life and Health are SEPARATE exams = $184 total</td></tr>
+      <tr><td>Exam Questions</td><td>Life: ~94 questions (81 scored) · Health: ~102 questions (89 scored) · Both must be passed within 90 days of each other</td></tr>
+      <tr><td>Passing Score</td><td>70% on EACH exam — scored independently, not averaged</td></tr>
+      <tr><td>Application Fee</td><td>$215 + $5.60 NIPR transaction fee — apply at nipr.com</td></tr>
+      <tr><td>Fingerprints</td><td><strong>REQUIRED</strong> — Illinois IDFPR-approved LiveScan vendor before submitting license application</td></tr>
+      <tr><td>Wait After Exam</td><td><strong>MANDATORY 5 business days</strong> after passing before applying via NIPR — use this window for fingerprinting</td></tr>
+      <tr><td>Temp License</td><td>Illinois does not issue temporary life/health insurance licenses</td></tr>
+      <tr><td>Scholarship</td><td>Program A — Permanent License Scholarship · 0–15 days = 100% · 16–30 days = 50%</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout c-blue">
+    <strong>📌 IL KEY NOTES</strong>
+    5-day mandatory wait after exam — start fingerprinting process during study week. Xcel Certificate of Completion expires 1 year from course end date. Both Life and Health exams must be passed within 90 days of each other.
+  </div>
+  <div class="callout c-green">
+    <strong>💰 SCHOLARSHIP GOAL</strong>
+    IL agents are in a permanent license state. Both exams (Life + Health) count toward the timeline. Encourage completion within 15 days for 100% reimbursement.
+  </div>
+
+  <div style="margin-top:24px;display:flex;gap:12px">
+    <button class="btn btn-primary" onclick="nav('scholarship')">View Scholarship Details</button>
+    <button class="btn btn-secondary" onclick="nav('states')">← All States</button>
+  </div>
+  <div class="page-footer">Globe Life Liberty National Division · Manager Reference · Confidential</div>
+</div>
+
+<!-- ══ TRUST ══════════════════════════════════════════════ -->
+<div class="page" id="page-trust">
+  <div class="page-hero">
+    <div class="page-hero-eyebrow">Section 8</div>
+    <div class="page-hero-title">Trust-Building <span>Strategies</span></div>
+    <div class="page-hero-sub">Six practices that close the trust gap with virtual agents.</div>
+  </div>
+  <p class="body">Most trust breakdowns happen because agents don't believe the opportunity is real, or feel unsupported once they're on their own. These six practices close the gap.</p>
+  <div class="trust-grid">
+    <div class="trust-card">
+      <h4>🗓 Lock in the class date at offer</h4>
+      <p>Pick the date together during the final interview. A calendar commitment shifts psychology from "I'll think about it" to "this is real."</p>
+    </div>
+    <div class="trust-card">
+      <h4>📋 Send chapter schedule in writing</h4>
+      <p>Share the daily outline right after the final interview. Removes ambiguity — they know exactly what 14 days looks like.</p>
+    </div>
+    <div class="trust-card">
+      <h4>💬 Daily progress check-ins</h4>
+      <p>A brief morning message keeps momentum and shows you're invested in their success, not just waiting on a license.</p>
+    </div>
+    <div class="trust-card">
+      <h4>📞 Introduce the Concierge Team</h4>
+      <p>Name the Concierge Team during the final interview and Day 1 message. Normalizes reaching out when stuck.</p>
+    </div>
+    <div class="trust-card">
+      <h4>🏆 Celebrate milestones</h4>
+      <p>Acknowledge when they finish the live class, pass a practice test, and schedule the exam. Small wins build trust fast.</p>
+    </div>
+    <div class="trust-card">
+      <h4>👥 Connect them to teammates</h4>
+      <p>Introduce them to other agents during or after the CLB. A peer community proves the opportunity is real.</p>
+    </div>
+  </div>
+  <div class="page-footer">Globe Life Liberty National Division · Manager Reference · Confidential</div>
+</div>
+
+<!-- ══ SCRIPT ═════════════════════════════════════════════ -->
+<div class="page" id="page-script">
+  <div class="page-hero">
+    <div class="page-hero-eyebrow">Section 9</div>
+    <div class="page-hero-title">Final Interview <span>Script</span></div>
+    <div class="page-hero-sub">Use as a guide, not word-for-word. Adapt to your voice.</div>
+  </div>
+
+  <div class="section-title">Step 1 — Open With Congratulations</div>
+  <div class="bubble b-manager"><div class="bubble-lbl">You (Manager)</div><div class="bubble-txt">"[Name], I'm really glad you're here. You've made it through the initial interview and the Career Leadership Briefing, and I want you to know — we don't bring everyone to this point. The fact that you're here tells me you have what it takes. So today, we're going to finalize everything and get you set up to launch."</div></div>
+  <div class="callout c-amber"><strong>📌 TONE</strong>Warm, direct, celebratory. This is an offer, not another evaluation. They should feel chosen.</div>
+
+  <div class="section-title">Step 2 — Confirm the Role & Virtual Model</div>
+  <div class="bubble b-manager"><div class="bubble-lbl">You (Manager)</div><div class="bubble-txt">"Let me be upfront about how we work. Our team is fully virtual — you'll never need to commute to an office. That's a real advantage, but it also means we rely on each other to follow through. When you say you'll do something, I need to know it's done. That's the foundation of how we operate together."</div></div>
+
+  <div class="section-title">Step 3 — Schooling, Scholarship & Investment</div>
+  <div class="bubble b-manager"><div class="bubble-lbl">You (Manager)</div><div class="bubble-txt">"To get started, you'll need your insurance license — that's non-negotiable in this business. Here's what I want you to hear: we're going to cover the cost of your pre-licensing coursework. That's on us. And through our scholarship program, once you pass your exam, we reimburse you. Finish in 15 days or less — you get 100% back on your next paycheck. 16 to 30 days is 50% back. So the faster you finish, the more you get back."</div></div>
+  <div class="bubble b-manager"><div class="bubble-lbl">You (Manager)</div><div class="bubble-txt">"In return, what I need from you is your commitment. We're going to get you licensed in 7 to 14 days. I'll be with you every step of the way — daily check-ins, answers to questions, cheering you on. But I need you to show up for yourself every single day. Can you do that?"</div></div>
+  <div class="bubble b-them"><div class="bubble-lbl">Them (Expected)</div><div class="bubble-txt">"Yes, absolutely."</div></div>
+
+  <div class="section-title">Step 4 — Introduce the Agent Concierge Team</div>
+  <div class="bubble b-manager"><div class="bubble-lbl">You (Manager)</div><div class="bubble-txt">"One more thing — you're not doing this alone. Globe Life has a dedicated Agent Concierge Team whose entire job is to support new agents through exam prep. If you're ever stuck, confused, or not sure what to do next, reach out to them: LNAgentConcierge@Globe.Life or call or text 469-317-0281. They'll answer questions, connect you to resources, and help you stay on track. Use them."</div></div>
+
+  <div class="section-title">Step 5 — Walk Through the Chapter Schedule</div>
+  <div class="bubble b-manager"><div class="bubble-lbl">You (Manager)</div><div class="bubble-txt">"Let me show you exactly what this looks like — because I don't want you staring at a course wondering what to do. Here's the schedule I use with all my agents. You'll cover one to two chapters per day. [State course provider] runs a live virtual class first, then you use the practice tests and flash cards to lock it in. By Day 14, you sit for your state exam — and then we get you into TNT training the following week."</div></div>
+  <div class="callout c-amber"><strong>📌 NOTE</strong>Share the chapter schedule (<a href="#" onclick="nav('schooling')">Pre-Licensing section</a>) here. Walk through it briefly.</div>
+
+  <div class="section-title">Step 6 — Lock In the Class Date Right Now</div>
+  <div class="bubble b-manager"><div class="bubble-lbl">You (Manager)</div><div class="bubble-txt">"Alright, let's get your class date on the calendar right now while we're together. Pull up your calendar — I'll wait. What's the soonest you can commit to starting? Ideally this week or early next week."</div></div>
+  <div class="callout c-amber"><strong>📌 CRITICAL</strong>Do not end this call without a class date on the calendar.</div>
+  <div class="bubble b-manager"><div class="bubble-lbl">You (Manager)</div><div class="bubble-txt">"Perfect. So you'll start on [date]. I'll send you the enrollment link right after this call. You've got your schedule, you've got the Concierge Team, you've got my support — and we've got your start date. This is really happening."</div></div>
+
+  <div class="section-title">Step 7 — Close Strong</div>
+  <div class="bubble b-close"><div class="bubble-lbl">You (Manager) — Close</div><div class="bubble-txt">"[Name], I am genuinely excited for you. You're about to do something most people never follow through on — they think about getting licensed, they talk about it, but they don't actually do it. You're doing it. In three weeks, you're going to be a licensed agent, in TNT training, and building something real. I'll be reaching out tonight with your enrollment link and your daily schedule. Welcome to the team."</div></div>
+
+  <hr class="divider">
+  <div class="section-title">Objection Handling</div>
+
+  <div class="objection">
+    <div class="obj-q">"I'm not sure I can finish in 14 days — I have [job / kids / schedule]."</div>
+    <div class="obj-a">"I hear you — life is busy. That's exactly why we built a one-to-two chapter per day plan. It's about 60–90 minutes of focused study. You don't have to quit your job or rearrange your life — you just have to protect that hour or two each day. Most agents with full schedules get it done in 10–12 days. What part of your schedule worries you most?"</div>
+  </div>
+  <div class="objection">
+    <div class="obj-q">"Can I think about the start date and get back to you?"</div>
+    <div class="obj-a">"Of course — but every week we delay is a week you're not earning. And remember: the faster you finish, the more the scholarship covers. I don't want 'I'll think about it' to cost you the 100% reimbursement window. What would help you feel ready to commit to a date today?"</div>
+  </div>
+  <div class="objection">
+    <div class="obj-q">"What if I don't pass the exam?"</div>
+    <div class="obj-a">"Great question — the course has a strong pass rate when you complete it and use the practice tests. If you don't pass on the first try, we'll work through it together. The Concierge Team can help you identify weak areas and get rescheduled. This isn't a one-shot deal. Follow the daily plan and you'll be ready."</div>
+  </div>
+  <div class="page-footer">Globe Life Liberty National Division · Manager Reference · Confidential</div>
+</div>
+
+<!-- ══ CHECK-INS ═══════════════════════════════════════════ -->
+<div class="page" id="page-checkins">
+  <div class="page-hero">
+    <div class="page-hero-eyebrow">Section 10</div>
+    <div class="page-hero-title">Daily Check-In <span>Messages</span></div>
+    <div class="page-hero-sub">14 days of messages. Tone: coach texting an athlete — warm, direct, invested.</div>
+  </div>
+
+  <span class="phase-pill" style="background:var(--blue-lt);color:var(--blue)">Pre-Class Prep · Days 1–2</span>
+  <div class="day-msg">
+    <div class="day-lbl"><div class="day-dot"></div>Day 1 Evening — within 1 hour of final interview</div>
+    <div class="bubble b-manager"><div class="bubble-txt">"Hey [Name]! So great to officially have you on the team. Here's your [TSI National / Xcel Solutions] enrollment link: [link]. Get signed up tonight so you're ready to roll. Your class starts [date] — I'll be checking in every morning to keep you on track. If you ever get stuck during prep, the Agent Concierge Team is there: LNAgentConcierge@Globe.Life or 469-317-0281. Let's get you licensed!"</div></div>
+    <div class="callout c-amber"><p>Send within 1 hour of hanging up. Include the Concierge contact info.</p></div>
+  </div>
+  <div class="day-msg">
+    <div class="day-lbl"><div class="day-dot"></div>Day 2 Morning — confirm enrollment</div>
+    <div class="bubble b-manager"><div class="bubble-txt">"Good morning [Name]! Quick check — did you get enrolled last night? If you ran into any issues, let me know. Your class is [X days] away — browse the course dashboard so it's familiar when class begins. Today's goal: enrolled and logged in."</div></div>
+    <div class="callout c-amber"><p>If not enrolled yet — this is your early warning. Address now, not Day 5.</p></div>
+  </div>
+
+  <span class="phase-pill" style="background:var(--green-lt);color:var(--green)">Live Virtual Class · Days 3–4</span>
+  <div class="day-msg">
+    <div class="day-lbl"><div class="day-dot" style="background:var(--green)"></div>Day 3 Morning — class day 1</div>
+    <div class="bubble b-manager"><div class="bubble-txt">"Today's the day! Your class kicks off this morning — log in 5 minutes early. [Illinois agents: webcam must be on the entire time and you must answer all polling questions or you'll have to reschedule.] Have a notepad ready, ask questions, soak everything in. Text me tonight!"</div></div>
+    <div class="callout c-blue"><p>Illinois: Remind IL agents of webcam and polling question requirements explicitly.</p></div>
+  </div>
+  <div class="day-msg">
+    <div class="day-lbl"><div class="day-dot" style="background:var(--green)"></div>Day 4 Morning — class day 2</div>
+    <div class="bubble b-manager"><div class="bubble-txt">"Day 2 of class — halfway through the hardest part. Today covers health insurance and state regulations. Pay extra attention to the state law section — it always shows up on the exam. Almost done with the live portion!"</div></div>
+  </div>
+
+  <span class="phase-pill" style="background:var(--green-lt);color:var(--green)">Self-Study & Review · Days 5–12</span>
+  <div class="day-msg"><div class="day-lbl"><div class="day-dot" style="background:var(--green)"></div>Day 5</div><div class="bubble b-manager"><div class="bubble-txt">"Great work finishing the live class! Now the real prep begins. Today: life insurance basics — use the flash cards in the portal. Goal: 80%+ on the practice quiz before moving on. How's it feeling?"</div></div></div>
+  <div class="day-msg"><div class="day-lbl"><div class="day-dot" style="background:var(--green)"></div>Day 6</div><div class="bubble b-manager"><div class="bubble-txt">"Good morning! Today: policy types and riders — term, whole, universal. These show up a lot on the exam. Pro tip: quiz yourself out loud, don't just read definitions. Let me know your practice score tonight."</div></div></div>
+  <div class="day-msg"><div class="day-lbl"><div class="day-dot" style="background:var(--green)"></div>Day 7 — One week in!</div><div class="bubble b-manager"><div class="bubble-txt">"One week in — you're doing great! Today is annuities. Key thing: an annuity is the opposite of life insurance — life insurance protects against dying too soon, an annuity protects against living too long. Once that clicks, the chapter gets easy."</div></div></div>
+  <div class="day-msg"><div class="day-lbl"><div class="day-dot" style="background:var(--green)"></div>Day 8</div><div class="bubble b-manager"><div class="bubble-txt">"Today: group insurance — shorter chapter. Use the extra time to revisit any life insurance topics that felt fuzzy. The exam loves to combine concepts, so strong fundamentals matter more than memorizing every detail."</div></div></div>
+  <div class="day-msg"><div class="day-lbl"><div class="day-dot" style="background:var(--green)"></div>Day 9</div><div class="bubble b-manager"><div class="bubble-txt">"Health chapter today — this is where people slow down, so push through. Focus on deductibles, copays, coinsurance, and out-of-pocket maximums. Those four concepts show up constantly. How many practice questions are you hitting daily?"</div></div></div>
+  <div class="day-msg"><div class="day-lbl"><div class="day-dot" style="background:var(--green)"></div>Day 10</div><div class="bubble b-manager"><div class="bubble-txt">"Almost in the home stretch! Today: HMOs, PPOs, Medicare, and Medicaid. Know the difference between Medicare Part A, B, C, and D — it's a favorite on the exam. Two days from full review. Stay focused."</div></div></div>
+  <div class="day-msg"><div class="day-lbl"><div class="day-dot" style="background:var(--green)"></div>Day 11</div><div class="bubble b-manager"><div class="bubble-txt">"Today: state law and ethics — usually 10–15% of the actual exam, so don't skip it. This is the last new content chapter. Tomorrow is all review. The finish line is close."</div></div></div>
+  <div class="day-msg"><div class="day-lbl"><div class="day-dot" style="background:var(--green)"></div>Day 12 — Full review day</div><div class="bubble b-manager"><div class="bubble-txt">"Full review day — no new chapters, just reinforcement. Take a full practice exam today: no notes, timer on. Anything under 75% in a topic area, go back to those flash cards. You're not cramming — you're confirming what you already know."</div></div></div>
+
+  <span class="phase-pill" style="background:var(--amber-lt);color:var(--amber)">Exam Week · Days 13–14</span>
+  <div class="day-msg">
+    <div class="day-lbl"><div class="day-dot" style="background:var(--amber)"></div>Day 13 — Schedule the exam</div>
+    <div class="bubble b-manager"><div class="bubble-txt">"Today's mission: schedule your state exam at pearsonvue.com. [Illinois: remember the mandatory 5-day wait — make sure fingerprinting is done this week.] Then one more light review pass. Light study today, confidence tomorrow."</div></div>
+    <div class="callout c-blue"><p>Illinois: Remind IL agents of the 5-day wait and fingerprinting requirement.</p></div>
+  </div>
+  <div class="day-msg">
+    <div class="day-lbl"><div class="day-dot" style="background:var(--amber)"></div>Day 14 — Exam day</div>
+    <div class="bubble b-manager"><div class="bubble-txt">"[Name] — today is the day. You've studied, you've shown up every single day, and you are ready. Arrive early with valid government-issued photo ID. Breathe, and trust what you've learned. Text me as soon as you're done. Go get that license!"</div></div>
+    <div class="callout c-amber"><p>PASS: respond immediately and warmly. DON'T PASS: "Let's review your diagnostic, identify weak areas, and get you rescheduled. This is not the end. The Concierge Team can help too: 469-317-0281."</p></div>
+  </div>
+
+  <span class="phase-pill" style="background:var(--teal-lt);color:var(--teal)">Licensed! · Day 15+</span>
+  <div class="day-msg">
+    <div class="day-lbl"><div class="day-dot" style="background:var(--teal)"></div>Day 15 — After passing</div>
+    <div class="bubble b-close"><div class="bubble-txt">"CONGRATULATIONS [Name]!!! You did it — you are now a licensed insurance agent. Submit your passing results to the Concierge Team right away for your scholarship reimbursement: LNAgentConcierge@Globe.Life or 469-317-0281. Here's what's next: [TNT training dates, logistics]. Get some rest — because Monday, we're building your business. Welcome to the team. For real this time."</div></div>
+  </div>
+  <div class="page-footer">Globe Life Liberty National Division · Manager Reference · Confidential</div>
+</div>
+
+</main>
+
+<!-- ══ ADD STATE MODAL ══════════════════════════════════════ -->
+<div class="modal-overlay" id="addStateModal">
+  <div class="modal">
+    <h2>Add New State</h2>
+    <p>Fill in the licensing requirements for the new state. This will add it to the State Requirements hub and the sidebar navigation.</p>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>State Abbreviation *</label>
+        <input type="text" id="f-abbr" placeholder="e.g. TX" maxlength="2" style="text-transform:uppercase">
+      </div>
+      <div class="form-group">
+        <label>Full State Name *</label>
+        <input type="text" id="f-name" placeholder="e.g. Texas">
+      </div>
+      <div class="form-group">
+        <label>Course Provider *</label>
+        <input type="text" id="f-provider" placeholder="e.g. TSI National">
+      </div>
+      <div class="form-group">
+        <label>License Type</label>
+        <select id="f-license">
+          <option>Permanent (no temp available)</option>
+          <option>Temp-to-Permanent available</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Required Pre-Licensing Hours</label>
+        <input type="text" id="f-hours" placeholder="e.g. 20 hours / None required">
+      </div>
+      <div class="form-group">
+        <label>Exam Provider</label>
+        <input type="text" id="f-exam-provider" placeholder="e.g. Pearson VUE">
+      </div>
+      <div class="form-group">
+        <label>Exam Fee</label>
+        <input type="text" id="f-exam-fee" placeholder="e.g. $50 per line">
+      </div>
+      <div class="form-group">
+        <label>Passing Score</label>
+        <input type="text" id="f-passing" placeholder="e.g. 70%">
+      </div>
+      <div class="form-group">
+        <label>Application Fee</label>
+        <input type="text" id="f-app-fee" placeholder="e.g. $100 + $5.60 NIPR">
+      </div>
+      <div class="form-group">
+        <label>Fingerprints Required?</label>
+        <select id="f-fingerprints">
+          <option value="No">No</option>
+          <option value="Yes">Yes — before application</option>
+          <option value="Yes — within 30 days">Yes — within 30 days of license</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Wait Period After Exam</label>
+        <input type="text" id="f-wait" placeholder="e.g. 24–48 hours / 5 business days">
+      </div>
+      <div class="form-group">
+        <label>Scholarship Type</label>
+        <select id="f-schol">
+          <option>Program A — Permanent License</option>
+          <option>Program B — Temp-to-Permanent</option>
+        </select>
+      </div>
+      <div class="form-group full">
+        <label>State-Specific Notes</label>
+        <textarea id="f-notes" placeholder="Any important details managers or agents need to know..."></textarea>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeAddState()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveState()">Add State</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── State data store ──────────────────────────────────────────────────────────
+const extraStates = {};
+
+function nav(id) {
+  // hide all pages
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  // remove active from all nav items
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  // show target page
+  const page = document.getElementById('page-' + id);
+  if (page) page.classList.add('active');
+  // activate nav item
+  const navItem = document.querySelector(`[onclick="nav('${id}')"]`);
+  if (navItem) navItem.classList.add('active');
+  // scroll to top
+  document.querySelector('.main').scrollTo ? window.scrollTo(0,0) : null;
+  window.scrollTo(0, 0);
+  return false;
+}
+
+function openAddState() {
+  document.getElementById('addStateModal').classList.add('open');
+}
+function closeAddState() {
+  document.getElementById('addStateModal').classList.remove('open');
+  // clear form
+  ['f-abbr','f-name','f-provider','f-hours','f-exam-provider','f-exam-fee','f-passing','f-app-fee','f-wait','f-notes'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+}
+
+function saveState() {
+  const abbr = document.getElementById('f-abbr').value.trim().toUpperCase();
+  const name = document.getElementById('f-name').value.trim();
+  if (!abbr || !name) { alert('State abbreviation and full name are required.'); return; }
+
+  const data = {
+    abbr,
+    name,
+    provider: document.getElementById('f-provider').value.trim() || '—',
+    license: document.getElementById('f-license').value,
+    hours: document.getElementById('f-hours').value.trim() || '—',
+    examProvider: document.getElementById('f-exam-provider').value.trim() || 'Pearson VUE',
+    examFee: document.getElementById('f-exam-fee').value.trim() || '—',
+    passing: document.getElementById('f-passing').value.trim() || '70%',
+    appFee: document.getElementById('f-app-fee').value.trim() || '—',
+    fingerprints: document.getElementById('f-fingerprints').value,
+    wait: document.getElementById('f-wait').value.trim() || '—',
+    schol: document.getElementById('f-schol').value,
+    notes: document.getElementById('f-notes').value.trim()
+  };
+
+  extraStates[abbr] = data;
+  buildStatePage(data);
+  addStateToNav(data);
+  addStateToHub(data);
+  closeAddState();
+  nav('state-' + abbr);
+}
+
+function buildStatePage(d) {
+  const heroColor = '#1a5fa0';
+  const scholBadge = d.schol.includes('Program B') ? 'Program B — Temp-to-Permanent' : 'Program A — Permanent License';
+  const html = `
+    <div class="page" id="page-state-${d.abbr}">
+      <div class="state-hero" style="background:${heroColor}">
+        <div class="state-name-row"><h1>${d.name}</h1><span class="state-provider-badge">${d.provider}</span></div>
+        <p>${d.license}</p>
+        <span class="state-schol-badge">💰 Scholarship ${scholBadge}</span>
+      </div>
+      <table class="tbl">
+        <thead><tr><th>Requirement</th><th>Details</th></tr></thead>
+        <tbody>
+          <tr><td>License Type</td><td>${d.license}</td></tr>
+          <tr><td>Course Provider</td><td>${d.provider}</td></tr>
+          <tr><td>Required Hours</td><td>${d.hours}</td></tr>
+          <tr><td>Exam Provider</td><td>${d.examProvider}</td></tr>
+          <tr><td>Exam Fee</td><td>${d.examFee}</td></tr>
+          <tr><td>Passing Score</td><td>${d.passing}</td></tr>
+          <tr><td>Application Fee</td><td>${d.appFee}</td></tr>
+          <tr><td>Fingerprints</td><td>${d.fingerprints}</td></tr>
+          <tr><td>Wait After Exam</td><td>${d.wait}</td></tr>
+          <tr><td>Scholarship</td><td>${d.schol} · 0–15 days = 100% · 16–30 days = 50%</td></tr>
+        </tbody>
+      </table>
+      ${d.notes ? `<div class="callout c-blue"><strong>📌 STATE NOTE</strong>${d.notes}</div>` : ''}
+      <div class="callout c-green"><strong>💰 SCHOLARSHIP GOAL</strong>Encourage agents to complete coursework and pass within 15 days of enrollment for 100% reimbursement.</div>
+      <div style="margin-top:24px;display:flex;gap:12px">
+        <button class="btn btn-primary" onclick="nav('scholarship')">View Scholarship Details</button>
+        <button class="btn btn-secondary" onclick="nav('states')">← All States</button>
+      </div>
+      <div class="page-footer">Globe Life Liberty National Division · Manager Reference · Confidential</div>
+    </div>`;
+  document.querySelector('.main').insertAdjacentHTML('beforeend', html);
+}
+
+function addStateToNav(d) {
+  const container = document.getElementById('extra-state-nav');
+  const a = document.createElement('a');
+  a.className = 'nav-item nav-state';
+  a.href = '#';
+  a.id = 'nav-state-' + d.abbr;
+  a.setAttribute('onclick', `nav('state-${d.abbr}')`);
+  a.innerHTML = `<span class="nav-icon">📍</span> ${d.name} (${d.abbr})`;
+  container.appendChild(a);
+}
+
+function addStateToHub(d) {
+  const selector = document.getElementById('state-selector');
+  const addBtn = selector.querySelector('.state-add-btn');
+  const btn = document.createElement('button');
+  btn.className = 'state-btn';
+  btn.setAttribute('onclick', `nav('state-${d.abbr}')`);
+  btn.innerHTML = `<span class="state-abbr">${d.abbr}</span><span class="state-full">${d.name}</span><span class="state-prov">${d.provider}</span>`;
+  selector.insertBefore(btn, addBtn);
+}
+
+// Close modal on overlay click
+document.getElementById('addStateModal').addEventListener('click', function(e) {
+  if (e.target === this) closeAddState();
+});
+</script>
+</body>
+</html>
