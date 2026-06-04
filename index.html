@@ -1161,6 +1161,7 @@ const extraStates = {};
 const SUPABASE_URL = "https://ghtwudtcgfywfgggyztc.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_SE1GhHygwcESdMkuF3BSug_K-RklCAQ";
 const NEW_HIRES_TABLE = "new_hires";
+const CUSTOM_STATES_TABLE = "custom_states";
 
 function supabaseReady() {
   return SUPABASE_URL && SUPABASE_ANON_KEY && !SUPABASE_URL.includes('PASTE_') && !SUPABASE_ANON_KEY.includes('PASTE_');
@@ -1392,7 +1393,7 @@ async function copyFollowup(id) {
   setPipelineStatus('Copied follow-up text.');
 }
 
-document.addEventListener('DOMContentLoaded', () => { loadNewHires(); });
+document.addEventListener('DOMContentLoaded', () => { loadNewHires(); loadCustomStates(); });
 
 
 function nav(id) {
@@ -1424,7 +1425,7 @@ function closeAddState() {
   });
 }
 
-function saveState() {
+async function saveState() {
   const abbr = document.getElementById('f-abbr').value.trim().toUpperCase();
   const name = document.getElementById('f-name').value.trim();
   if (!abbr || !name) { alert('State abbreviation and full name are required.'); return; }
@@ -1445,12 +1446,46 @@ function saveState() {
     notes: document.getElementById('f-notes').value.trim()
   };
 
+  try {
+    if (supabaseReady()) {
+      await supabaseRequest(`${CUSTOM_STATES_TABLE}?on_conflict=abbr`, {
+        method: 'POST',
+        headers: { Prefer: 'resolution=merge-duplicates,return=representation' },
+        body: JSON.stringify(data)
+      });
+    }
+    renderCustomState(data);
+    closeAddState();
+    nav('state-' + abbr);
+  } catch (err) {
+    console.error(err);
+    alert('State was not saved. Check the custom_states table and RLS policies. ' + err.message);
+  }
+}
+
+async function loadCustomStates() {
+  if (!supabaseReady()) return;
+  try {
+    const rows = await supabaseRequest(`${CUSTOM_STATES_TABLE}?select=*&order=name.asc`);
+    (rows || []).forEach(renderCustomState);
+  } catch (err) {
+    console.warn('Saved custom states did not load. If you have not created custom_states yet, run the SQL first.', err);
+  }
+}
+
+function renderCustomState(data) {
+  const abbr = data.abbr;
+  if (!abbr) return;
   extraStates[abbr] = data;
+  const existingPage = document.getElementById('page-state-' + abbr);
+  if (existingPage) existingPage.remove();
+  const existingNav = document.getElementById('nav-state-' + abbr);
+  if (existingNav) existingNav.remove();
+  const existingHub = document.getElementById('state-btn-' + abbr);
+  if (existingHub) existingHub.remove();
   buildStatePage(data);
   addStateToNav(data);
   addStateToHub(data);
-  closeAddState();
-  nav('state-' + abbr);
 }
 
 function buildStatePage(d) {
@@ -1505,6 +1540,7 @@ function addStateToHub(d) {
   const addBtn = selector.querySelector('.state-add-btn');
   const btn = document.createElement('button');
   btn.className = 'state-btn';
+  btn.id = 'state-btn-' + d.abbr;
   btn.setAttribute('onclick', `nav('state-${d.abbr}')`);
   btn.innerHTML = `<span class="state-abbr">${d.abbr}</span><span class="state-full">${d.name}</span><span class="state-prov">${d.provider}</span>`;
   selector.insertBefore(btn, addBtn);
