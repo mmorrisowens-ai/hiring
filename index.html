@@ -328,6 +328,47 @@ hr.divider { border: none; border-top: 1px solid var(--border); margin: 32px 0; 
 .followup-text { background: var(--blue-lt); color:#1a3e6a; border-radius:8px; padding:12px 14px; font-size:13px; line-height:1.6; white-space:pre-wrap; margin: 10px 0; }
 .copy-btn { background: var(--green); color:white; border:none; border-radius:7px; padding:8px 12px; font-family:inherit; font-size:12px; font-weight:700; cursor:pointer; }
 .copy-btn:hover { opacity:.9; }
+
+
+/* ── MANAGER COMMAND BOARD ── */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.stat-card h3 {
+  font-size: 12px;
+  color: var(--text-light);
+  margin-bottom: 8px;
+}
+
+.stat-card p {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.command-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.command-table th,
+.command-table td {
+  padding: 12px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+
 @media (max-width: 760px) {
   .pipeline-form { grid-template-columns: 1fr; }
   .pipeline-card { grid-template-columns: 1fr; }
@@ -1071,6 +1112,49 @@ hr.divider { border: none; border-top: 1px solid var(--border); margin: 32px 0; 
     <div class="card-title">Saved New Hires</div>
     <div id="new-hire-list" class="pipeline-list"></div>
   </div>
+
+  <div class="pipeline-panel">
+    <div class="card-title">Manager Command Board</div>
+    <p class="body">Quick manager view of every new hire by status, stage bucket, and next action.</p>
+
+    <div class="dashboard-grid">
+      <div class="stat-card">
+        <h3>Total Hires</h3>
+        <p id="totalHires">0</p>
+      </div>
+
+      <div class="stat-card">
+        <h3>Licensing</h3>
+        <p id="licensingCount">0</p>
+      </div>
+
+      <div class="stat-card">
+        <h3>Training</h3>
+        <p id="trainingCount">0</p>
+      </div>
+
+      <div class="stat-card">
+        <h3>Producing</h3>
+        <p id="producingCount">0</p>
+      </div>
+    </div>
+
+    <table class="command-table">
+      <thead>
+        <tr>
+          <th>Agent</th>
+          <th>Status</th>
+          <th>Next Action</th>
+        </tr>
+      </thead>
+      <tbody id="commandBoardRows">
+        <tr>
+          <td colspan="3">Loading...</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
   <div class="page-footer">Globe Life Liberty National Division · Manager Reference · Confidential</div>
 </div>
 
@@ -1277,6 +1361,7 @@ async function loadNewHires() {
     renderNewHirePicker(window.__newHires);
     renderNewHireList(window.__newHires);
     renderFollowups(window.__newHires);
+    renderCommandBoard(window.__newHires);
     setPipelineStatus(`Loaded ${window.__newHires.length} new hire(s).`);
   } catch (err) {
     console.error(err);
@@ -1327,6 +1412,47 @@ function renderNewHireList(rows) {
       <div><span>${nextMilestoneLabel(h)}</span></div>
       <button class="btn btn-secondary" onclick="fillNewHireForm(window.__newHires[${i}])">Edit</button>
     </div>`).join('');
+}
+
+
+function renderCommandBoard(rows) {
+  const board = document.getElementById("commandBoardRows");
+  if (!board) return;
+
+  rows = rows || [];
+
+  let licensing = 0;
+  let training = 0;
+  let producing = 0;
+
+  rows.forEach(h => {
+    if (["enrolled", "pre_class", "in_class", "studying", "testing"].includes(h.status)) licensing++;
+    if (["passed", "orientation", "tnt"].includes(h.status)) training++;
+    if (["active"].includes(h.status)) producing++;
+  });
+
+  const totalEl = document.getElementById("totalHires");
+  const licensingEl = document.getElementById("licensingCount");
+  const trainingEl = document.getElementById("trainingCount");
+  const producingEl = document.getElementById("producingCount");
+
+  if (totalEl) totalEl.textContent = rows.length;
+  if (licensingEl) licensingEl.textContent = licensing;
+  if (trainingEl) trainingEl.textContent = training;
+  if (producingEl) producingEl.textContent = producing;
+
+  if (!rows.length) {
+    board.innerHTML = '<tr><td colspan="3">No agents found yet.</td></tr>';
+    return;
+  }
+
+  board.innerHTML = rows.map(h => `
+    <tr>
+      <td>${escapeHtml(h.agent_name || 'Unnamed Agent')}</td>
+      <td>${escapeHtml(formatStatus(h.status))}</td>
+      <td>${escapeHtml(nextMilestoneLabel(h))}</td>
+    </tr>
+  `).join("");
 }
 
 function renderFollowups(rows) {
